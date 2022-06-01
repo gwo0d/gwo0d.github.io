@@ -1,0 +1,43 @@
+[debug] [2022-06-01T15:48:51.138Z] ----------------------------------------------------------------------
+[debug] [2022-06-01T15:48:51.139Z] Command:       /opt/homebrew/Cellar/node/18.2.0/bin/node /opt/homebrew/bin/firebase init
+[debug] [2022-06-01T15:48:51.139Z] CLI Version:   11.0.1
+[debug] [2022-06-01T15:48:51.139Z] Platform:      darwin
+[debug] [2022-06-01T15:48:51.139Z] Node Version:  v18.2.0
+[debug] [2022-06-01T15:48:51.140Z] Time:          Wed Jun 01 2022 16:48:51 GMT+0100 (British Summer Time)
+[debug] [2022-06-01T15:48:51.140Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-06-01T15:48:51.142Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-06-01T15:48:51.142Z] > authorizing via signed-in user (hello@gwood.dev)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/gwo0d/Desktop/gwood.dev
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[info] i  If you want to create a project in a Google Cloud organization or folder, please use "firebase projects:create" instead, and return to this command when you've created the project. 
+[debug] [2022-06-01T15:49:07.612Z] > refreshing access token with scopes: []
+[debug] [2022-06-01T15:49:07.612Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2022-06-01T15:49:08.049Z] <<< HTTP RESPONSE 200 {"date":"Wed, 01 Jun 2022 15:49:08 GMT","expires":"Mon, 01 Jan 1990 00:00:00 GMT","pragma":"no-cache","cache-control":"no-cache, no-store, max-age=0, must-revalidate","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2022-06-01T15:49:08.100Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects [none]
+[debug] [2022-06-01T15:49:08.101Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects {"projectId":"gwood-dot-dev","name":"Website"}
+[debug] [2022-06-01T15:49:09.008Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects 400
+[debug] [2022-06-01T15:49:09.008Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects {"error":{"code":400,"message":"field [project_id] has issue [project_id contains prohibited words]","status":"INVALID_ARGUMENT","details":[{"@type":"type.googleapis.com/google.rpc.BadRequest","fieldViolations":[{"field":"project_id","description":"project_id contains prohibited words"}]},{"@type":"type.googleapis.com/google.rpc.Help","links":[{"url":"https://cloud.google.com/resource-manager/reference/rest/v1/projects"}]}]}}
+[debug] [2022-06-01T15:49:09.011Z] FirebaseError: HTTP Error: 400, field [project_id] has issue [project_id contains prohibited words]
+    at module.exports (/opt/homebrew/lib/node_modules/firebase-tools/lib/responseToError.js:47:12)
+    at RetryOperation._fn (/opt/homebrew/lib/node_modules/firebase-tools/lib/apiv2.js:286:39)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[error] 
+[error] Error: Failed to create project. See firebase-debug.log for more info.
