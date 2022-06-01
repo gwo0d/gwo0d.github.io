@@ -1,0 +1,186 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="ie=edge"><title>BCrypt Login System - Proof of Concept - George Wood</title><meta name=viewport content="width=device-width,initial-scale=1"><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><link rel=stylesheet href=/css/style.min.4003efb7aec366633ff556c4f2da44dce5be1f88c5587d6f3e86d309f715d16d.css><meta name=description content="A reasonably secure login system using BCrypt"><meta property="og:title" content="BCrypt Login System - Proof of Concept"><meta property="og:type" content="website"><meta property="og:url" content="https://gwood.dev/blog/2021/01/bcrypt-login-system/"><meta property="og:description" content="A reasonably secure login system using BCrypt"><meta name=twitter:card content="summary"><meta name=twitter:site content="@gwo0d"><meta name=twitter:creator content="@gwo0d"><link rel=preconnect href=https://fonts.gstatic.com><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel=stylesheet></head><body class='page frame page-default-single'><div id=menu-main-mobile class=menu-main-mobile><ul class=menu><li class=menu-item-blog><a href=https://gwood.dev/blog/>Blog</a></li><li class=menu-item-contact><a href=https://gwood.dev/pages/contact/>Contact</a></li></ul></div><div id=wrapper class=wrapper><div class=header><a class=header-logo href=https://gwood.dev>George Wood</a><div class=menu-main><ul><li class=menu-item-blog><a href=/blog/>Blog</a></li><li class=menu-item-contact><a href=/pages/contact/>Contact</a></li></ul></div><div id=toggle-menu-main-mobile class=hamburger-trigger><button class=hamburger>Menu</button></div></div><div class=intro><h1>BCrypt Login System - Proof of Concept<span class=dot>.</span></h1></div><div class=content><p>Following on from some of my previous content about data security, I&rsquo;ve written a short proof of concept program showing how BCrypt can be used to securely store passwords.</p><p>I hope you like it, and feedback is always welcome.</p><h4 id=mainpy>main.py</h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>try</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=kn>from</span> <span class=nn>user</span> <span class=kn>import</span> <span class=n>User</span>
+</span></span><span class=line><span class=cl>    <span class=kn>import</span> <span class=nn>os</span>
+</span></span><span class=line><span class=cl>    <span class=kn>import</span> <span class=nn>time</span>
+</span></span><span class=line><span class=cl><span class=k>except</span> <span class=ne>ImportError</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;</span><span class=se>\n</span><span class=s2>Error! Necessary libraries unavailable...</span><span class=se>\n</span><span class=s2>&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>clear</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=n>time</span><span class=o>.</span><span class=n>sleep</span><span class=p>(</span><span class=mf>2.5</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>os</span><span class=o>.</span><span class=n>system</span><span class=p>(</span><span class=s1>&#39;cls&#39;</span> <span class=k>if</span> <span class=n>os</span><span class=o>.</span><span class=n>name</span> <span class=o>==</span> <span class=s1>&#39;nt&#39;</span> <span class=k>else</span> <span class=s1>&#39;clear&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>username</span> <span class=o>=</span> <span class=nb>input</span><span class=p>(</span><span class=s2>&#34;Username: &#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>password</span> <span class=o>=</span> <span class=nb>input</span><span class=p>(</span><span class=s2>&#34;Password: &#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Example Username: testUser</span>
+</span></span><span class=line><span class=cl><span class=c1># Example Password: testPass</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>user</span> <span class=o>=</span> <span class=n>User</span><span class=p>(</span><span class=n>username</span><span class=p>,</span> <span class=n>password</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>go</span> <span class=o>=</span> <span class=kc>True</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>while</span> <span class=n>go</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>try</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>menu</span> <span class=o>=</span> <span class=nb>int</span><span class=p>(</span><span class=nb>input</span><span class=p>(</span><span class=s2>&#34;</span><span class=se>\n</span><span class=s2>Enter 1 to login</span><span class=se>\n</span><span class=s2>Enter 2 to sign up</span><span class=se>\n</span><span class=s2>Enter 3 to delete your credentials from the database</span><span class=se>\n</span><span class=s2>Enter 4 to exit</span><span class=se>\n</span><span class=s2>: &#34;</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>menu</span> <span class=o>==</span> <span class=mi>1</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>result</span> <span class=o>=</span> <span class=n>user</span><span class=o>.</span><span class=n>Authenticate</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=n>result</span> <span class=o>==</span> <span class=kc>True</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=nb>print</span><span class=p>(</span><span class=sa>f</span><span class=s2>&#34;</span><span class=se>\n</span><span class=s2>Success!</span><span class=se>\n</span><span class=s2>You are logged in as: </span><span class=si>{</span><span class=n>user</span><span class=o>.</span><span class=n>Username</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=n>clear</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>            <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;</span><span class=se>\n</span><span class=s2>Error! please try again...&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=n>clear</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>elif</span> <span class=n>menu</span> <span class=o>==</span> <span class=mi>2</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            
+</span></span><span class=line><span class=cl>            <span class=n>result</span> <span class=o>=</span> <span class=n>user</span><span class=o>.</span><span class=n>SignUp</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=n>result</span> <span class=o>==</span> <span class=kc>True</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=nb>print</span><span class=p>(</span><span class=sa>f</span><span class=s2>&#34;</span><span class=se>\n</span><span class=s2>Success!</span><span class=se>\n\n</span><span class=s2>You are logged in as: </span><span class=si>{</span><span class=n>user</span><span class=o>.</span><span class=n>Username</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=n>clear</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>            <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;</span><span class=se>\n</span><span class=s2>Error! that username is taken...&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=n>clear</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>elif</span> <span class=n>menu</span> <span class=o>==</span> <span class=mi>3</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>result</span> <span class=o>=</span> <span class=n>user</span><span class=o>.</span><span class=n>RemoveUser</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=n>result</span> <span class=o>==</span> <span class=kc>True</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=nb>print</span><span class=p>(</span><span class=sa>f</span><span class=s2>&#34;</span><span class=se>\n</span><span class=s2>The credentials associated with the username </span><span class=si>{</span><span class=n>username</span><span class=si>}</span><span class=s2> have been deleted.&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=n>clear</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>                <span class=c1># Terminate program as User object must be recreated.</span>
+</span></span><span class=line><span class=cl>                <span class=n>go</span> <span class=o>=</span> <span class=kc>False</span>
+</span></span><span class=line><span class=cl>            <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;</span><span class=se>\n</span><span class=s2>Please make sure you are logged in before deleting your credentials.</span><span class=se>\n</span><span class=s2>&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=n>clear</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>elif</span> <span class=n>menu</span> <span class=o>==</span> <span class=mi>4</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>clear</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>            <span class=n>go</span> <span class=o>=</span> <span class=kc>False</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;</span><span class=se>\n</span><span class=s2>Error! Please try again...&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=n>clear</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=k>except</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;</span><span class=se>\n</span><span class=s2>An unexpected error has occurred! Please try again...&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>clear</span><span class=p>()</span>
+</span></span></code></pre></div><h4 id=userpy>user.py</h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>try</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=kn>import</span> <span class=nn>bcrypt</span>
+</span></span><span class=line><span class=cl>    <span class=kn>from</span> <span class=nn>replit</span> <span class=kn>import</span> <span class=n>db</span>
+</span></span><span class=line><span class=cl><span class=k>except</span> <span class=ne>ImportError</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;</span><span class=se>\n</span><span class=s2>Error! Necessary libraries unavailable...</span><span class=se>\n</span><span class=s2>&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>User</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>IsAuthenticated</span> <span class=o>=</span> <span class=kc>False</span>
+</span></span><span class=line><span class=cl>    <span class=n>Username</span> <span class=o>=</span> <span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=n>__Attempts</span> <span class=o>=</span> <span class=mi>0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=fm>__init__</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>username_input</span><span class=p>,</span> <span class=n>password_input</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1># Initialise private variables</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>__username_input</span> <span class=o>=</span> <span class=n>username_input</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>__password_input</span> <span class=o>=</span> <span class=n>password_input</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>SignUp</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=s1>&#39;&#39;&#39;Takes the username and password used to initialise the object, and stores them securely&#39;&#39;&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>username</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>__username_input</span>
+</span></span><span class=line><span class=cl>        <span class=c1># Encode password to UTF-8 for use by BCrypt</span>
+</span></span><span class=line><span class=cl>        <span class=n>password_bytes</span> <span class=o>=</span> <span class=nb>bytes</span><span class=p>(</span><span class=bp>self</span><span class=o>.</span><span class=n>__password_input</span><span class=p>,</span> <span class=s2>&#34;UTF-8&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=c1># Hash password using the BCrypt algorithm</span>
+</span></span><span class=line><span class=cl>        <span class=n>hashed_password</span> <span class=o>=</span> <span class=n>bcrypt</span><span class=o>.</span><span class=n>hashpw</span><span class=p>(</span><span class=n>password_bytes</span><span class=p>,</span> <span class=n>bcrypt</span><span class=o>.</span><span class=n>gensalt</span><span class=p>(</span><span class=n>rounds</span><span class=o>=</span><span class=mi>14</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>        
+</span></span><span class=line><span class=cl>        <span class=n>username_available</span> <span class=o>=</span> <span class=kc>False</span> <span class=c1># True for testing - change to False for</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1># Checks if the username is available</span>
+</span></span><span class=line><span class=cl>        <span class=k>try</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>db</span><span class=p>[</span><span class=n>username</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>        <span class=k>except</span> <span class=ne>KeyError</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>username_available</span> <span class=o>=</span> <span class=kc>True</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>username_available</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=c1># Store password in database</span>
+</span></span><span class=line><span class=cl>            <span class=n>db</span><span class=p>[</span><span class=n>username</span><span class=p>]</span> <span class=o>=</span> <span class=n>hashed_password</span><span class=o>.</span><span class=n>decode</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>            <span class=bp>self</span><span class=o>.</span><span class=n>Username</span> <span class=o>=</span> <span class=n>username</span>
+</span></span><span class=line><span class=cl>            <span class=bp>self</span><span class=o>.</span><span class=n>IsAuthenticated</span> <span class=o>=</span> <span class=kc>True</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=kc>True</span>
+</span></span><span class=line><span class=cl>        <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=kc>False</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>Authenticate</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        
+</span></span><span class=line><span class=cl>        <span class=c1># Default to False</span>
+</span></span><span class=line><span class=cl>        <span class=n>authenticated</span> <span class=o>=</span> <span class=kc>False</span>
+</span></span><span class=line><span class=cl>        <span class=n>username</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>__username_input</span>
+</span></span><span class=line><span class=cl>        <span class=c1># Encode password to UTF-8 for use by BCrypt</span>
+</span></span><span class=line><span class=cl>        <span class=n>password_bytes</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>__password_input</span><span class=o>.</span><span class=n>encode</span><span class=p>(</span><span class=s2>&#34;UTF-8&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1># Checks if the username is recognised</span>
+</span></span><span class=line><span class=cl>        <span class=k>try</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>stored_password</span> <span class=o>=</span> <span class=n>db</span><span class=p>[</span><span class=n>username</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>        <span class=k>except</span> <span class=ne>KeyError</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=kc>False</span>
+</span></span><span class=line><span class=cl>        
+</span></span><span class=line><span class=cl>        <span class=c1># Will return True if the inputted password matches the stored hash</span>
+</span></span><span class=line><span class=cl>        <span class=n>authenticated</span> <span class=o>=</span> <span class=n>bcrypt</span><span class=o>.</span><span class=n>checkpw</span><span class=p>(</span><span class=n>password_bytes</span><span class=p>,</span> <span class=n>stored_password</span><span class=o>.</span><span class=n>encode</span><span class=p>(</span><span class=s2>&#34;UTF-8&#34;</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>authenticated</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=bp>self</span><span class=o>.</span><span class=n>IsAuthenticated</span> <span class=o>=</span> <span class=kc>True</span>
+</span></span><span class=line><span class=cl>            <span class=bp>self</span><span class=o>.</span><span class=n>Username</span> <span class=o>=</span> <span class=n>username</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=kc>True</span>
+</span></span><span class=line><span class=cl>        <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=bp>self</span><span class=o>.</span><span class=n>__Attempts</span> <span class=o>+=</span> <span class=mi>1</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=kc>False</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>RemoveUser</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>username</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>__username_input</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>try</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=c1># Credentials can only be removed if the user has logged in</span>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=bp>self</span><span class=o>.</span><span class=n>IsAuthenticated</span> <span class=o>==</span> <span class=kc>True</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=k>del</span> <span class=n>db</span><span class=p>[</span><span class=n>username</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>                <span class=bp>self</span><span class=o>.</span><span class=n>IsAuthenticated</span> <span class=o>=</span> <span class=kc>False</span>
+</span></span><span class=line><span class=cl>                <span class=k>return</span> <span class=kc>True</span>
+</span></span><span class=line><span class=cl>            <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=k>return</span> <span class=kc>False</span>
+</span></span><span class=line><span class=cl>        <span class=k>except</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=kc>False</span>
+</span></span></code></pre></div><p><em>Note: The code is also available on <a href=https://repl.it/@gwo0d/BCrypt-Login-System-OOP>repl.it</a>, and is designed to run on there.</em></p><h4 id=test-credentials>Test Credentials</h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>Username: testUser
+</span></span><span class=line><span class=cl>Password: testPass
+</span></span></code></pre></div><h4 id=license>License</h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-markdown data-lang=markdown><span class=line><span class=cl>MIT License
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Copyright (c) 2021 George Wood
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Permission is hereby granted, free of charge, to any person obtaining a copy
+</span></span><span class=line><span class=cl>of this software and associated documentation files (the &#34;Software&#34;), to deal
+</span></span><span class=line><span class=cl>in the Software without restriction, including without limitation the rights
+</span></span><span class=line><span class=cl>to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+</span></span><span class=line><span class=cl>copies of the Software, and to permit persons to whom the Software is
+</span></span><span class=line><span class=cl>furnished to do so, subject to the following conditions:
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>The above copyright notice and this permission notice shall be included in all
+</span></span><span class=line><span class=cl>copies or substantial portions of the Software.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>THE SOFTWARE IS PROVIDED &#34;AS IS&#34;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+</span></span><span class=line><span class=cl>IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+</span></span><span class=line><span class=cl>FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+</span></span><span class=line><span class=cl>AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+</span></span><span class=line><span class=cl>LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+</span></span><span class=line><span class=cl>OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+</span></span><span class=line><span class=cl>SOFTWARE.
+</span></span></code></pre></div><p><em>-George</em></p></div><div class=footer><div class=footer-social><span class="social-icon social-icon-twitter"><a href=https://twitter.com/gwo0d title=twitter target=_blank rel=noopener><img src=/images/social/twitter.svg width=24 height=24 alt=twitter></a></span>
+<span class="social-icon social-icon-github"><a href=https://github.com/gwo0d title=github target=_blank rel=noopener><img src=/images/social/github.svg width=24 height=24 alt=github></a></span>
+<span class="social-icon social-icon-linkedin"><a href=https://www.linkedin.com/in/gwo0d title=linkedin target=_blank rel=noopener><img src=/images/social/linkedin.svg width=24 height=24 alt=linkedin></a></span></div></div></div><script type=text/javascript src=/js/bundle.min.e8820e06c35081f02bd38077b576f674034d43dfcdcdad926bf46915236c2ee6.js></script></body></html>
