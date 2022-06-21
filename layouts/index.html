@@ -1,0 +1,42 @@
+{{ define "header_css" }}{{ end }}
+{{ define "body_classes" }}page-home{{ end }}
+
+{{ define "main" }}
+
+{{ if .Site.Params.showAuthorOnHomepage }}
+{{ partial "author-large.html" . }}
+{{ end }}
+
+{{ if $.Site.Params.pride }}
+<style>
+    .gaypride {
+        background-image: linear-gradient(to right, #FF0018, #FFA52C, #FFFF41, #008018, #0000F9, #86007D);
+        -webkit-background-clip: text;
+        -moz-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+</style>
+{{ end }}
+
+<div class="intro">
+    {{ if $.Site.Params.pride }}
+    <h1><span class="gaypride">{{ .Title }}{{ if .Site.Params.addDot }}<span class="dot">.</span>{{ end }}</span></h1>
+    {{ else }}
+    <h1>{{ .Title }}{{ if .Site.Params.addDot }}<span class="dot">.</span>{{ end }}</h1>
+    {{ end }}
+    <div class="intro-content">{{ .Content }}</div>
+</div>
+
+{{ if .Site.Params.showPostsOnHomepage }}
+{{ $paginator := .Paginate (where .Site.RegularPages "Type" "posts") }}
+{{ range $paginator.Pages }}
+{{ .Render "summary" }}
+{{ end }}
+{{ template "_internal/pagination.html" . }}
+{{ end }}
+
+{{ end }}
+
+{{ define "footer_js" }}
+{{ end }}

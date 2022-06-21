@@ -26,3 +26,5 @@ paginate = 3
   addDot = true
 
   highlightColor = '#fcba03'
+
+  pride = true
