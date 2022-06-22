@@ -3,7 +3,7 @@ title: "GPG Tutorial - Command Line"
 date: 2021-10-10T15:32:59+01:00
 slug: "GPG-Tutorial-Command-Line"
 description: "A comprehensive tutorial on command line GPG usage..."
-keywords: [GPG, GNU Privacy Guard, Security, Cryptography, Privacy, Cyber Security]
+keywords: [GPG, PGP, GNU Privacy Guard, Security, Cryptography, Privacy, Cyber Security]
 draft: false
 tags: [cyber-security, long-form, privacy]
 math: false
@@ -12,7 +12,7 @@ toc: true
 
 ## Introduction
 
-*My GPG keys can be found [here](/about)*
+*My GPG key can be found [here](/)*
 
 In a world where there exists an ever-growing economy revolving around the sale and processing of individuals’ private
 data, tools like [GNU Privacy Guard (GPG)](https://gnupg.org) offer a convenient way to take back control of what was
