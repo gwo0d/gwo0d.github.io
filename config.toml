@@ -25,6 +25,6 @@ paginate = 3
   addFrame = true
   addDot = true
 
-  highlightColor = '#FF66C4'
+  highlightColor = '#38bcf5'
 
   pride = true
